@@ -86,6 +86,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+  variant: 'primary',
   show: true,
   transition: Fade,
   closeLabel: 'Close alert',
