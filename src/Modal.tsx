@@ -386,7 +386,7 @@ const Modal: BsPrefixRefForwardingComponent<'div', ModalProps> =
 
       const handleEscapeKeyDown = (e) => {
         if (!keyboard && backdrop === 'static') {
-          // Call preventDefault to stop modal from closing in react-overlays,
+          // Call preventDefault to stop modal from closing in restart ui,
           // then play our animation.
           e.preventDefault();
           handleStaticModalAnimation();
