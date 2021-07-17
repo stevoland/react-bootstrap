@@ -1,7 +1,10 @@
 import classNames from 'classnames';
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import BaseButton, { ButtonProps as BaseButtonProps } from '@restart/ui/Button';
+import {
+  useButtonProps,
+  ButtonProps as BaseButtonProps,
+} from '@restart/ui/Button';
 import { useBootstrapPrefix } from './ThemeProvider';
 import { BsPrefixProps, BsPrefixRefForwardingComponent } from './helpers';
 import { ButtonVariant } from './types';
@@ -72,12 +75,19 @@ const defaultProps = {
 
 const Button: BsPrefixRefForwardingComponent<'button', ButtonProps> =
   React.forwardRef<HTMLButtonElement, ButtonProps>(
-    ({ bsPrefix, variant, size, active, className, ...props }, ref) => {
+    ({ as, bsPrefix, variant, size, active, className, ...props }, ref) => {
       const prefix = useBootstrapPrefix(bsPrefix, 'btn');
+      const [buttonProps, { tagName }] = useButtonProps({
+        tagName: as,
+        ...props,
+      });
+
+      const Component = tagName as React.ElementType;
 
       return (
-        <BaseButton
+        <Component
           {...props}
+          {...buttonProps}
           ref={ref}
           className={classNames(
             className,
