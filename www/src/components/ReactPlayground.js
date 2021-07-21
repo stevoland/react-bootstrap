@@ -19,6 +19,9 @@ import useMutationObserver from '@restart/hooks/useMutationObserver';
 import PlaceholderImage from './PlaceholderImage';
 import Sonnet from './Sonnet';
 
+import styles from '../css/CopyButton.module.css'
+
+
 const scope = {
   useEffect,
   useRef,
@@ -120,7 +123,8 @@ function Preview({ showCode, className }) {
   }, [hjs, live.element]);
 
   useMutationObserver(exampleRef.current, {
-    childList: true, subtree: true },
+    childList: true, subtree: true
+  },
     (mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.addedNodes.length > 0) {
@@ -176,7 +180,7 @@ const EditorInfoMessage = styled('div')`
 
 let uid = 0;
 
-function Editor() {
+function Editor({handleCodeChange}) {
   const [focused, setFocused] = useState(false);
   const [ignoreTab, setIgnoreTab] = useState(false);
   const [keyboardFocused, setKeyboardFocused] = useState(false);
@@ -219,11 +223,13 @@ function Editor() {
 
   const showMessage = keyboardFocused || (focused && !ignoreTab);
 
+   
+
   return (
     <div className="position-relative">
       <StyledEditor
         onFocus={handleFocus}
-        onBlur={handleBlur}
+        onBlur={(e) => {handleBlur(), handleCodeChange(e)}}
         onKeyDown={handleKeyDown}
         onMouseDown={handleMouseDown}
         ignoreTabKey={ignoreTab}
@@ -231,6 +237,8 @@ function Editor() {
         aria-label="Example code editor"
         padding={20}
       />
+
+
       {showMessage && (
         <EditorInfoMessage id={id} aria-live="polite">
           {ignoreTab ? (
@@ -256,11 +264,24 @@ const propTypes = {
 
 function Playground({ codeText, exampleClassName, showCode = true }) {
   // Remove Prettier comments and trailing semicolons in JSX in displayed code.
+  const [copyStatus, setCopy] = useState('Copy to clipboard')
+  
+  
   const code = codeText
-    .replace(PRETTIER_IGNORE_REGEX, '')
+  .replace(PRETTIER_IGNORE_REGEX, '')
     .trim()
     .replace(/>;$/, '>');
 
+    const [codeToCopy, setcodeToCopy] = useState(code)
+    const handleCodeChange = (e) => { setcodeToCopy(e.target.value)}
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(codeToCopy) //copies code to clipboard
+    .then(setCopy('Copied!'))
+  }
+
+
+  const resetCopyStatus = () => {setCopy('Copy to clipboard')}
   return (
     <StyledContainer>
       <LiveProvider
@@ -269,8 +290,21 @@ function Playground({ codeText, exampleClassName, showCode = true }) {
         mountStylesheet={false}
         noInline={codeText.includes('render(')}
       >
+
         <Preview showCode={showCode} className={exampleClassName} />
-        {showCode && <Editor />}
+        {
+          showCode
+          &&
+          <>
+            <div className={styles.tooltip} onMouseOut={resetCopyStatus}>
+              <button onClick={handleCopy} className={styles.styledCopyButton} value={codeText} >
+                <span className={styles.tooltiptext}>{copyStatus}</span>
+                Copy
+              </button>
+            </div>
+            <Editor handleCodeChange={handleCodeChange}/>
+          </>
+        }
       </LiveProvider>
     </StyledContainer>
   );
