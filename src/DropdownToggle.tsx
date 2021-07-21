@@ -12,7 +12,8 @@ import { useBootstrapPrefix } from './ThemeProvider';
 import useWrappedRefWithWarning from './useWrappedRefWithWarning';
 import { BsPrefixRefForwardingComponent } from './helpers';
 
-export interface DropdownToggleProps extends ButtonProps {
+export interface DropdownToggleProps extends Omit<ButtonProps, 'as'> {
+  as?: React.ElementType;
   split?: boolean;
   childBsPrefix?: string;
 }

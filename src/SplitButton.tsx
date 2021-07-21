@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-
-import Button, { ButtonType } from './Button';
+import { ButtonType } from '@restart/ui/Button';
+import Button from './Button';
 import ButtonGroup from './ButtonGroup';
 import Dropdown, { DropdownProps } from './Dropdown';
 import { PropsFromToggle } from './DropdownToggle';
@@ -83,7 +83,7 @@ const propTypes = {
   size: PropTypes.string,
 };
 
-const defaultProps = {
+const defaultProps: Partial<SplitButtonProps> = {
   toggleLabel: 'Toggle dropdown',
   type: 'button',
 };

@@ -4,14 +4,14 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import BaseOverlay, {
   OverlayProps as BaseOverlayProps,
-} from 'react-overlays/Overlay';
-import safeFindDOMNode from 'react-overlays/safeFindDOMNode';
+} from '@restart/ui/Overlay';
 import { componentOrElement, elementType } from 'prop-types-extra';
 import useMergedRefs from '@restart/hooks/useMergedRefs';
 import useOverlayOffset from './useOverlayOffset';
 import Fade from './Fade';
 import { TransitionType } from './helpers';
 import { ArrowProps, Placement, RootCloseEvent } from './types';
+import safeFindDOMNode from './safeFindDOMNode';
 
 export interface OverlayInjectedProps {
   ref: React.RefCallback<HTMLElement>;
